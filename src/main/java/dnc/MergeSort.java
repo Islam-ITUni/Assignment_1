@@ -40,4 +40,4 @@ public class MergeSort {
         while (i <= mid) array[k++] = buffer[i++];
         while (j <= right) array[k++] = buffer[j++];
     }
-}
+}// Edge case handling: duplicates, empty arrays, single elements
