@@ -1,176 +1,83 @@
-# Assignment\_1
+# Divide and Conquer Algorithms  
 
-Assignment\_1 for Design and Analysis of Algorithms by Imanbayev Islam
+## Project Overview  
+This project contains my implementation of four classic divide-and-conquer algorithms. Each one was built from scratch with careful recursion handling and performance tracking. The goal was not only correctness, but also understanding their behavior in practice.  
 
+## Algorithms Implemented  
 
+### MergeSort  
+- Stable sorting algorithm.  
+- Splits the array, recursively sorts, and merges.  
+- Uses **insertion sort** for small arrays to improve efficiency.  
+- Reuses a single buffer to reduce memory allocations.  
 
-# Divide-and-Conquer Algorithms Assignment
+### QuickSort  
+- In-place sorting with randomized pivot selection.  
+- Always recurses into the **smaller partition first** to control recursion depth.  
+- Expected recursion depth remains O(log n).  
 
+### Deterministic Select (Median of Medians)  
+- Finds the *k-th smallest element* in O(n) time.  
+- Groups elements in fives and uses the **median-of-medians** pivot.  
+- Recurses only into the side that contains the element, guaranteeing performance.  
 
+### Closest Pair of Points (2D)  
+- Solves the closest pair problem in O(n log n) time.  
+- Sorts points by x, splits recursively, and checks a vertical strip ordered by y.  
+- Uses the classic 7–8 neighbor scan for efficiency.  
+  
 
-\## Architecture Notes
+### Recursion Management  
 
+- **MergeSort**: balanced recursion depth O(log n).  
+- **QuickSort**: smaller-first recursion + tail recursion optimization.  
+- **Deterministic Select**: recursion limited by median-of-medians pivoting.  
+- **Closest Pair**: logarithmic recursion depth with strip checks.  
 
+### Performance Tracking  
 
-\### Recursion Depth Control
+A custom **metrics system** was added to measure:  
+- Execution time  
+- Number of comparisons  
+- Memory allocations  
+- Maximum recursion depth  
 
-\- \*\*MergeSort\*\*: Natural depth of O(log n) due to balanced splitting
+This made it possible to compare theoretical results with empirical ones.  
 
-\- \*\*QuickSort\*\*: Bounded depth achieved by recursing on smaller partition first, tail recursion optimization
+## Testing Strategy  
 
-\- \*\*Deterministic Select\*\*: Worst-case O(log n) depth via median-of-medians pivot selection
+- Verified sorting algorithms against `Arrays.sort` on random and adversarial arrays.  
+- Checked recursion depth bounds for QuickSort and MergeSort.  
+- For Deterministic Select, compared results with sorted arrays across many trials.  
+- For Closest Pair, validated against a brute-force implementation on small inputs.  
+- Included edge-case tests: empty arrays, single-element arrays, minimal inputs.  
 
-\- \*\*Closest Pair\*\*: O(log n) depth with strip optimization
 
+## Performance Analysis  
 
+**Theoretical vs practical findings:**  
+- **MergeSort**: stable O(n log n), predictable performance.  
+- **QuickSort**: typically fastest in practice due to cache efficiency.  
+- **Deterministic Select**: guarantees O(n), but higher constant factors make it slower on small n.  
+- **Closest Pair**: efficient O(n log n), strip optimization works as expected.  
 
-\### Memory Management
+## Project Structure  
 
-\- \*\*MergeSort\*\*: Single reusable buffer allocated once to minimize allocations
+src/
+├── main/java/dnc/
+│ ├── mergesort/
+│ ├── quicksort/
+│ ├── select/
+│ ├── closestpair/
+│ ├── metrics/
+│ └── util/
+└── test/java/dnc/
+└── AlgorithmTest.java
 
-\- \*\*QuickSort\*\*: In-place partitioning with O(1) extra space
 
-\- \*\*Deterministic Select\*\*: Minimal temporary arrays for median groups
+## Usage  
 
-\- \*\*Closest Pair\*\*: Strip arrays sized dynamically based on point density
-
-
-
-\## Recurrence Analysis
-
-
-
-\### MergeSort
-
-\*\*Recurrence\*\*: T(n) = 2T(n/2) + O(n)  
-
-\*\*Master Theorem\*\*: Case 2 (a = 2, b = 2, f(n) = Θ(n))  
-
-\*\*Solution\*\*: Θ(n log n)  
-
-\*\*Justification\*\*: f(n) = Θ(n) = Θ(n^(log₂2)) → Case 2 applies
-
-
-
-\### QuickSort
-
-\*\*Recurrence\*\*: E\[T(n)] = T(k) + T(n-k) + O(n) where k ∼ Uniform(0,n)  
-
-\*\*Akra-Bazzi Intuition\*\*: Expected k = n/2 → E\[T(n)] = 2T(n/2) + O(n)  
-
-\*\*Solution\*\*: Expected Θ(n log n)  
-
-\*\*Justification\*\*: Randomized pivot ensures balanced partitioning with high probability
-
-
-
-\### Deterministic Select
-
-\*\*Recurrence\*\*: T(n) ≤ T(⌈n/5⌉) + T(⌊7n/10⌋) + O(n)  
-
-\*\*Solution\*\*: O(n)  
-
-\*\*Justification\*\*: The recurrence solves to cn(1 + 9/10 + (9/10)² + ...) ≤ 10cn = O(n)
-
-
-
-\### Closest Pair
-
-\*\*Recurrence\*\*: T(n) = 2T(n/2) + O(n)  
-
-\*\*Master Theorem\*\*: Case 2 (same as MergeSort)  
-
-\*\*Solution\*\*: Θ(n log n)  
-
-\*\*Justification\*\*: Strip optimization reduces combine step from O(n²) to O(n)
-
-
-
-\## Performance Analysis
-
-
-
-\### Time Complexity Validation
-
-| Algorithm | Theoretical | Empirical (n=10,000) |
-
-|-----------|-------------|---------------------|
-
-| MergeSort | O(n log n)  | ~2.3 ms             |
-
-| QuickSort | O(n log n)  | ~1.8 ms             |
-
-| Select    | O(n)        | ~0.9 ms             |
-
-| Closest   | O(n log n)  | ~4.1 ms             |
-
-
-
-\### Recursion Depth Analysis
-
-!\[Recursion Depth vs n](docs/depth\_vs\_n.png)
-
-\- MergeSort shows perfect logarithmic growth
-
-\- QuickSort depth varies but stays within 2log₂n bound
-
-\- Select demonstrates sub-logarithmic depth due to aggressive pruning
-
-
-
-\### Constant Factor Effects
-
-\- \*\*Cache Effects\*\*: QuickSort outperforms MergeSort due to better locality
-
-\- \*\*GC Impact\*\*: MergeSort's buffer allocation shows minor GC overhead at large n
-
-\- \*\*Branch Prediction\*\*: Deterministic Select suffers from unpredictable pivoting
-
-
-
-\## Theory vs Practice Summary
-
-
-
-\### Alignments
-
-\- All algorithms match theoretical complexity bounds
-
-\- Recursion depth stays within expected logarithmic bounds
-
-\- Relative performance ordering matches theoretical expectations
-
-
-
-\### Mismatches
-
-\- QuickSort constant factors better than theoretical predictions due to cache effects
-
-\- Deterministic Select's O(n) only beneficial for very large n due to high constants
-
-\- Real-world memory hierarchy effects more significant than theoretical models suggest
-
-
-
-\## Usage
-
-
-
+To compile and test the project:  
 ```bash
-
-\# Run tests
-
+mvn compile
 mvn test
-
-
-
-\# Run benchmarks
-
-mvn clean compile exec:java -Dexec.mainClass="dnc.benchmark.BenchmarkRunner"
-
-
-
-\# Generate performance data
-
-java -cp target/classes dnc.PerformanceRunner
-
